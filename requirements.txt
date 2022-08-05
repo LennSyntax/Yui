@@ -1,0 +1,5 @@
+git+https://github.com/Pycord-Development/pycord
+async-timeout==3.0.1
+asyncio==3.4.3
+requests==2.25.1
+wavelink==1.2.4
