@@ -178,32 +178,25 @@ class Admin(commands.Cog, name='admin'):
             embed = discord.Embed(description="You don't have permission to run this command.", color=0xD684FF)
             await ctx.respond(embed=embed, delete_after=10)
     
-    @slash_command(name="VC Undeafen", description="Undeafen a user in the voice channel.", guild_ids=None)
+    @vc.command(description="Undeafen a user in the voice channel.")
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_guild_permissions(manage_messages=True)
     async def undeafen(self, ctx, member: Option(discord.Member, description="Mention the user to undeafen.", required=True)):
-        asdf = ctx.author
-        f = member.top_role
-        h = asdf.top_role
-        if h > f or ctx.guild.owner == ctx.author and not member == ctx.author:
-            if member.guild_permissions.ban_members and not ctx.guild.owner == ctx.author:
-                embed = discord.Embed(description=f"Something went wrong please try again.", color=0xD684FF)
+        if ctx.author.top_role > member.top_role or ctx.guild.owner == ctx.author:
+            if member.guild_permissions.ban_members and ctx.guild.owner != ctx.author:
+                embed = discord.Embed(description="Something went wrong, please try again.", color=0xD684FF)
                 await ctx.respond(embed=embed, delete_after=10)
             else: 
                 await member.edit(deafen=False)
-                await ctx.respond(f"{member.mention} was undeafen in the VC.")
+                await ctx.respond(f"{member.mention} was undeafened in the VC.")
         else:
-            if member == ctx.author:
-                embed = discord.Embed(description=f"You were never deafen and you can't undeafen yourself.", color=0xD684FF)
-                await ctx.respond(embed=embed, delete_after=10)
-            else:
-                embed = discord.Embed(description=f"Hmm don't try to break, that person has a higher or equal role to you.", color=0xD684FF)
-                await ctx.respond(embed=embed, delete_after=10)
+            embed = discord.Embed(description="You can't undeafen this user.", color=0xD684FF)
+            await ctx.respond(embed=embed, delete_after=10)
 
     @undeafen.error
     async def undeafen_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            embed = discord.Embed(description=f"Oh no! you don't have the permission to run this commands.", color=0xD684FF)
+            embed = discord.Embed(description="You don't have permission to run this command.", color=0xD684FF)
             await ctx.respond(embed=embed, delete_after=10)
 
 def setup(bot):
