@@ -35,10 +35,10 @@ class ControlPanel(discord.ui.View):
     async def resume_and_pause(self, button: discord.ui.Button, interaction: discord.Interaction):
         if self.vc.is_paused():
             await self.vc.resume()
-            await self.update_message(interaction, content="<:play:991587195397865523> The song has been resumed.")
+            await self.update_message(interaction, content="The song has been resumed.")
         else:
             await self.vc.pause()
-            await self.update_message(interaction, content="<:pause:991587278403158067> The song has been paused.")
+            await self.update_message(interaction, content="The song has been paused.")
 
     @discord.ui.button(label="Queue", style=discord.ButtonStyle.blurple)
     async def queue(self, button: discord.ui.Button, interaction: discord.Interaction):
@@ -51,8 +51,8 @@ class ControlPanel(discord.ui.View):
         queue = self.vc.queue.copy()
         for idx, song in enumerate(queue, start=1):
             embed.add_field(
-                name=f"**#{idx}** <:arrow:991585305759055972> {song.title}",
-                value=f"<:space:992037334767898735> **Duration** `[{str(datetime.timedelta(seconds=song.length))}]`",
+                name=f"**#{idx}** {song.title}",
+                value=f"**Duration** `[{str(datetime.timedelta(seconds=song.length))}]`",
                 inline=False
             )
         await self.update_message(interaction, embed=embed)
@@ -67,7 +67,7 @@ class ControlPanel(discord.ui.View):
         next_song = self.vc.queue.get()
         await self.vc.play(next_song)
         embed = discord.Embed(color=0xD684FF)
-        embed.add_field(name="<:music:991690031553073212> Now playing:", value=f"{next_song.title}...")
+        embed.add_field(name="Now playing:", value=f"{next_song.title}...")
         await self.update_message(interaction, embed=embed)
 
     @discord.ui.button(label="Now Playing", style=discord.ButtonStyle.blurple)
@@ -78,7 +78,7 @@ class ControlPanel(discord.ui.View):
             return
 
         embed = discord.Embed(
-            title=f"<:music:991690031553073212> Now playing {self.vc.track.title}",
+            title=f"Now playing {self.vc.track.title}",
             description=f"Artist: {self.vc.track.author}",
             color=0xD684FF
         )
@@ -99,7 +99,7 @@ class ControlPanel(discord.ui.View):
                 data = await response.json()
                 lyrics = data["lyrics"]
                 embed = discord.Embed(
-                    title=f"<:music:991690031553073212> {name}",
+                    title=f"{name}",
                     description=f"{lyrics[:2000]}[...](<{data['links']['genius']}>)",
                     color=0xD684FF
                 )
